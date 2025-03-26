@@ -11,7 +11,6 @@ package com.example.escape_the_lab.controller;
 
 import com.example.escape_the_lab.model.Lab;
 import com.example.escape_the_lab.model.Substance;
-import com.example.escape_the_lab.ui.rAcidNeutralization;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,61 +29,80 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
 public class AcidNeutralizationLab extends Lab {
     private String acid;
     private String base;
     public ArrayList<Substance> activeSubstances = new ArrayList<>();
+    public ArrayList<Substance> droppedSubstances = new ArrayList<>();
     @FXML
-    ImageView AcidImage1, AcidImage2, AcidImage3, AcidImage4, AcidImage5, BaseImage1,BaseImage2, BaseImage3, BaseImage4, BaseImage5, AcidSprite1, AcidSprite2,AcidSprite3,AcidSprite4,AcidSprite5, BaseSprite1, BaseSprite5,BaseSprite2,BaseSprite3,BaseSprite4;    @FXML
-
+    ImageView AcidSprite1, AcidSprite2,AcidSprite3,AcidSprite4,AcidSprite5, AcidImage1, AcidImage2, AcidImage3, AcidImage4, AcidImage5;    
+    @FXML
     StackPane AcidHome1, AcidHome2, AcidHome3, AcidHome4, AcidHome5, AcidDisplay1, AcidDisplay2, AcidDisplay3, AcidDisplay4, AcidDisplay5;
-    @FXML
-    StackPane BaseHome1, BaseHome2, BaseHome3, BaseHome4, BaseHome5, BaseDisplay1, BaseDisplay2, BaseDisplay3, BaseDisplay4, BaseDisplay5;
     @FXML
     Pane arenaPane;
     @FXML
-    VBox acidBank, baseBank;
+    VBox AcidBank;
     private Lab lab;
     Stage primaryStage;
-    rAcidNeutralization acidNeutralizationLabUI;
+     Substance substance1;
+     Substance substance2;
+     Substance substance3;
+     Substance substance4;
+     Substance substance5;
+    
+    
     
     public AcidNeutralizationLab(Stage stage) {
         this.primaryStage = stage;
-        //this.acidNeutralizationLabUI = new rAcidNeutralization(stage, this);
     }
 
 
 
    @FXML
 private void initialize() {
+       initializeLab(lab);
     AcidSprite1.setOpacity(0);
         AcidSprite2.setOpacity(0);
         AcidSprite3.setOpacity(0);
         AcidSprite4.setOpacity(0);
         AcidSprite5.setOpacity(0);
-      
         setupDrag();
         setTarget();
-    if (arenaPane == null) {
+    if (AcidBank == null) {
         System.out.println("arenaPane is still null!");
-        
     }
+    for (Substance s : activeSubstances) {
+    System.out.println("Initialized: " + s.getName());
+}
 }
 
     @Override
     public void startLab() {
-        //acidNeutralizationLabUI.showMainScene();
         primaryStage.setScene(createScene());
     primaryStage.show();
+
     }
 
     @Override
     public boolean checkSolution() {
-        return false;
+        if (droppedSubstances.isEmpty()) {
+        return false; 
+    }
+        boolean hasNeutralized = false;
+ 
+
+    for (Substance substance : droppedSubstances) {
+        if (substance.equals(substance3) && substance.equals(substance5)) {
+            hasNeutralized = true;
+        }
+        
+    }
+
+    return hasNeutralized;
     }
 
     @Override
@@ -114,14 +132,26 @@ private void initialize() {
 
     public void initializeLab(Lab lab) {
         this.lab = lab;
+        substance1 = new Substance("Hydrochloric Acid", 1.0, AcidSprite1, 100, 100);
+     substance2 = new Substance("Sulfuric Acid", 2.0, AcidSprite2, 100, 100);
+     substance3 = new Substance("Sodium Hydroxide", 13.0, AcidSprite3, 100, 100);
+     substance4 = new Substance("Ammonia", 11.0, AcidSprite4, 100, 100);
+     substance5 = new Substance("Acetic Acid", 4.7, AcidSprite5, 100, 100);
+
+    activeSubstances.add(substance1);
+    activeSubstances.add(substance2);
+    activeSubstances.add(substance3);
+    activeSubstances.add(substance4);
+    activeSubstances.add(substance5);
+  
     }
      
     /**
      * Set up draggable substances from the VBox
      */
     private void setupDrag() {
-        StackPane[] substances = {AcidDisplay1, AcidDisplay2, AcidDisplay3, AcidDisplay4, AcidDisplay5};
-
+ StackPane[] substances = {AcidHome1, AcidHome2, AcidHome3, AcidHome4, AcidHome5};
+ //StackPane[] substances = {AcidDisplay1, AcidDisplay2, AcidDisplay3, AcidDisplay4, AcidDisplay5};
         for (StackPane substance : substances) {
             ImageView img = new ImageView();
             for (Node child : substance.getChildren()) {
@@ -136,9 +166,6 @@ private void initialize() {
                 ClipboardContent content = new ClipboardContent();//stores data
                 content.putImage(finalImage);
                 db.setContent(content);
-               // db.setDragView(finalImage);
-               //SS event.setDragDetect(true);
-               // event.consume();
             });
 
             // set initial size (or reset it if needed)
@@ -175,7 +202,6 @@ private void initialize() {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
         });
-
         arenaPane.setOnDragDropped(this::addSubstanceToArena);
     }
 //
@@ -186,16 +212,14 @@ private void initialize() {
 //     * moving the substance
 //     */
     private void addSubstanceToArena(DragEvent event) {
-        // re take a look at this
         Dragboard db = event.getDragboard();
 
     if (db.hasImage()) {
         StackPane draggedDisplay = (StackPane) event.getGestureSource();
 
         Substance currentSubstance = createNewSubstance(draggedDisplay);
+        
 
-
-  
             try {
                 // Move the duck to the arena
                 assert currentSubstance != null; // There should be a duck selected
@@ -214,16 +238,19 @@ private void initialize() {
                 if (!arenaPane.getChildren().contains(currentSubstance.display)) {
                     arenaPane.getChildren().add(currentSubstance.display);
                     currentSubstance.sprite.setOpacity(1);
+                    droppedSubstances.add(currentSubstance);
                     
                 }
 
                 // make the duck draggable within the arena
                 Draggable(currentSubstance);
+                
+             //   detectDroppedSubstances();
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
+detectDroppedSubstances();
             event.setDropCompleted(true);
         } else {
             event.setDropCompleted(false);
@@ -243,31 +270,28 @@ private void initialize() {
             Dragboard db = substance.display.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.putImage(substance.sprite.getImage());
-            db.setDragView(substance.sprite.getImage()); 
             db.setContent(content);
         });
 
         // Set up the acidBank and baseBank to accept subastances dragged back from the arena
-        acidBank.setOnDragOver(event -> {
-            if (event.getGestureSource() != acidBank && event.getDragboard().hasImage()) {
+        AcidBank.setOnDragOver(event -> {
+            if (event.getGestureSource() != AcidBank && event.getDragboard().hasImage()) {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
         });
 
-     
-
         // handle the drop when the substance is dragged back to the acidBank and baseBank
-        acidBank.setOnDragDropped(event -> {
+        AcidBank.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
 
             if (db.hasImage()) {
                 removeSubstance(substance);
+                activeSubstances.remove(substance);
                 event.setDropCompleted(true);
             } else {
                 event.setDropCompleted(false);
             }
         });
-
     }
 //
 //    /**
@@ -276,8 +300,6 @@ private void initialize() {
 //     * @param substance selected substance
 //     */
     private void removeSubstance(Substance substance) {
-        // Remove the dragged substance from its current parent
-        arenaPane.getChildren().remove(substance.display);
         substance.display.setOpacity(0);
         substance.sprite.setFitWidth(100);
         substance.sprite.setFitHeight(100);
@@ -298,8 +320,8 @@ private void initialize() {
         }
 
         Draggable(substance);
-        activeSubstances.remove(substance);
-       // substance.setActive(false);
+        substance.setActive(false);
+        arenaPane.getChildren().remove(substance.display);
 
     }
 //    /**
@@ -319,39 +341,58 @@ Substance currentSusbtance = null;
         }
 
 if (!Substance.existsIn(activeSubstances, substanceImage)) {
-    int substanceNumber = activeSubstances.size() + 1;
-    Substance newSubstance = new Substance("new", 2, substanceImage, substanceImage.getLayoutX(), substanceImage.getLayoutY());
-
-    switch (substanceNumber) {
-        case 1 -> newSubstance.setHome(AcidImage1);
-        case 2 -> newSubstance.setHome(AcidImage2);
-        case 3 -> newSubstance.setHome(AcidImage3);
-        case 4 -> newSubstance.setHome(AcidImage4);
-        case 5 -> newSubstance.setHome(AcidImage5);
+    Substance newSubstance = new Substance(substanceImage);
+    switch (newSubstance.substanceNumber()) {
+        case 1 -> newSubstance = substance1;
+            case 2 -> newSubstance = substance2;
+                case 3 -> newSubstance = substance3;
+                    case 4 -> newSubstance = substance4;
+                        case 5 -> newSubstance = substance5;
+                         
     }
-//
-//    activeSubstances.add(newSubstance);
-//    currentSusbtance = newSubstance;
+    switch (newSubstance.substanceNumber()) {
+        case 1 -> newSubstance.setHome(AcidSprite1);
+        case 2 -> newSubstance.setHome(AcidSprite2);
+        case 3 -> newSubstance.setHome(AcidSprite3);
+        case 4 -> newSubstance.setHome(AcidSprite4);
+        case 5 -> newSubstance.setHome(AcidSprite5);
+    }
 
+//switch (newSubstance.substanceNumber()) {
+//    case 1:
+//        newSubstance = substance1;
+//        break;
+//    case 2:
+//        newSubstance = substance2;
+//        break;
+//    case 3:
+//        newSubstance = substance3;
+//        break;
+//    case 4:
+//        newSubstance = substance4;
+//        break;
+//    case 5:
+//        newSubstance = substance5;
+//        break;
+//}
             for (Substance other : activeSubstances) {
                 other.setFocused(false);
             }
-
-           
 
           
             newSubstance.setFocused(true);
           
 
             // Handle focus of ducks
-            newSubstance.display.pressedProperty().addListener(_ -> {
-                for (Substance other : activeSubstances) {
-                    other.setFocused(false);
-                }
-
-                // Set the duck's focused properties accordingly
-                newSubstance.setFocused(true);
-            });
+            newSubstance.display.pressedProperty().addListener(event -> {
+        
+            for (Substance other : activeSubstances) {
+                other.setFocused(false);
+            }
+            // Set the duck's focused properties accordingly
+        //  newSubstance.setFocused(true);
+       
+    });
 
             activeSubstances.add(newSubstance);
 
@@ -364,18 +405,72 @@ if (!Substance.existsIn(activeSubstances, substanceImage)) {
             }
         }
         return currentSusbtance;
+
+        
 }
 
-//private boolean substanceExists(ImageView substanceImage) {
-//    for (Substance substance : activeSubstances) {
-//        if (substance.getImageView().equals(substanceImage)) {
-//            return true;
+    
+
+    private void detectDroppedSubstances() {
+        for (Substance substance : droppedSubstances) {
+        System.out.println("Dropped substance: " + substance.getName());
+    }
+        System.out.println("Dropped substances: " + droppedSubstances);
+        if (droppedSubstances.contains(substance3) && droppedSubstances.contains(substance5)) {
+            System.out.println("Success! You neutralized the floor");
+            // Add logic to proceed to the next level
+        } else if (droppedSubstances.size() >= 2) {
+            System.out.println("Incorrect substances! You lose a life.");
+            // Add logic to reduce player lives
+        }
+    }
+//    private Substance findExistingSubstance(StackPane substanceDisplay) {
+//    ImageView substanceImage = null;
+//
+//    // Extract the ImageView from the StackPane
+//    for (Node node : substanceDisplay.getChildren()) {
+//        if (node instanceof ImageView) {
+//            substanceImage = (ImageView) node;
 //        }
 //    }
-//    return false;
+//
+//    // If no image was found, return null
+//    if (substanceImage == null) {
+//        return null;
+//    }
+//
+//    // Search for the existing substance that matches the image
+//    for (Substance substance : activeSubstances) {
+//        if (substance.sprite.equals(substanceImage)) {  
+//            return substance;  // Found the existing substance, return it
+//        }
+//    }System.out.println("Active substances:");
+//for (Substance substance : activeSubstances) {
+//    System.out.println(substance.getName() + " - " + substance.getSprite());
 //}
-    public void mixSolutions() {
-
-    }
+//if (substanceImage == null) {
+//    System.out.println("Error: No ImageView found in StackPane.");
+//    return null;
+//}
+//System.out.println("Extracted ImageView: " + substanceImage);
+//for (Substance substance : activeSubstances) {
+//    System.out.println("Comparing with: " + substance.getSprite());
+//    if (substance.getSprite() == substanceImage) {  // Using '==' for reference comparison
+//        System.out.println("Match found: " + substance.getName());
+//        return substance;
+//    }
+//}
+//for (Substance substance : activeSubstances) {
+//    if (substance.getSprite().getImage().getUrl().equals(substanceImage.getImage().getUrl())) {
+//        System.out.println("Match found based on image URL: " + substance.getName());
+//        return substance;
+//    }
+//}
+//
+//
+//    return null;  // No existing substance was found
+//    }
+    
+    
 }
 
