@@ -9,6 +9,7 @@ package com.example.escape_the_lab.model;
  * @author ALAllaire
  */
 import java.util.ArrayList;
+import java.util.Objects;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
@@ -39,9 +40,13 @@ public class Substance {
             this.initialPositionY = initialPositionY;
             this.sprite = sprite;
             this.sprite.setScaleX(-1);
-            this.home = home;
+            //this.home = home;
             setupDisplay();
         }
+         public Substance(ImageView sprite) {
+        this("Unnamed", 7.0, sprite, sprite.getLayoutX(), sprite.getLayoutY()); 
+        // Default name = "Unnamed", pH = 7.0 (neutral)
+    }
 
         private void setupDisplay() {
         VBox displaySubstanceData = new VBox(5);
@@ -64,6 +69,7 @@ public class Substance {
         public ImageView getSprite() {
             return sprite;
         }
+        
 
        
     public int substanceNumber() {
@@ -117,6 +123,23 @@ public static boolean existsIn(ArrayList<Substance> list, ImageView image) {
             }
         }
         return false;
+    }
+@Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Substance that = (Substance) obj;
+        return Objects.equals(name, that.name); // Compare based on substance name
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Substance{name='" + name + "'}";
     }
   
     }

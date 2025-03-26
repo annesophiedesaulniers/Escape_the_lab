@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="0.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="0.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <Pane fx:id="arenaPane" layoutX="24.0" layoutY="1.0" prefHeight="600.0" prefWidth="618.0" style="-fx-background-color: #9999;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="1.0">
@@ -39,90 +38,45 @@
                      <children>
                         <ImageView fx:id="AcidImage1" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/pt1.png" />
+                              <Image url="@../images/substance.png" />
                            </image>
                         </ImageView>
-                        <StackPane fx:id="AcidDisplay1" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="AcidSprite1" fitHeight="96.0" fitWidth="100.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                                    <Image url="@../images/pt1.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
                      </children>
                   </StackPane>
                   <StackPane fx:id="AcidHome2" layoutX="10.0" layoutY="198.0" prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="AcidImage2" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/pt2.png" />
+                              <Image url="@../images/substance.png" />
                            </image>
                         </ImageView>
-                        <StackPane fx:id="AcidDisplay2">
-                           <children>
-                              <ImageView fx:id="AcidSprite2" fitHeight="96.0" fitWidth="100.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" >
-                           <image>
-                                    <Image url="@../images/pt2.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
                      </children>
                   </StackPane>
                   <StackPane fx:id="AcidHome3" layoutX="10.0" layoutY="273.0" prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="AcidImage3" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/pt3.png" />
+                              <Image url="@../images/substance.png" />
                            </image>
                         </ImageView>
-                        <StackPane fx:id="AcidDisplay3">
-                           <children>
-                              <ImageView fx:id="AcidSprite3" fitHeight="96.0" fitWidth="100.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" >
-                           <image>
-                                    <Image url="@../images/pt3.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
                      </children>
                   </StackPane>
                   <StackPane fx:id="AcidHome4" layoutX="10.0" layoutY="348.0" prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="AcidImage4" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/pt4.png" />
+                              <Image url="@../images/substance.png" />
                            </image>
                         </ImageView>
-                        <StackPane fx:id="AcidDisplay4">
-                           <children>
-                              <ImageView fx:id="AcidSprite4" fitHeight="96.0" fitWidth="100.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" >
-                           <image>
-                                    <Image url="@../images/pt4.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
                      </children>
                   </StackPane>
                   <StackPane fx:id="AcidHome5" layoutX="10.0" layoutY="404.0" prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="AcidImage5" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/pt5.png" />
+                              <Image url="@../images/substance.png" />
                            </image>
                         </ImageView>
-                        <StackPane fx:id="AcidDisplay5">
-                           <children>
-                              <ImageView fx:id="AcidSprite5" fitHeight="96.0" fitWidth="100.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" >
-                           <image>
-                                    <Image url="@../images/pt5.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
                      </children>
                   </StackPane>
                </children>
@@ -134,4 +88,3 @@
       </GridPane>
    </left>
 </BorderPane>
-

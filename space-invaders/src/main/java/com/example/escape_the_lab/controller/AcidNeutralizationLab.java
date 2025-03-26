@@ -10,6 +10,7 @@ package com.example.escape_the_lab.controller;
  */
 
 import com.example.escape_the_lab.model.Lab;
+import javafx.application.Platform;
 import com.example.escape_the_lab.model.Substance;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,6 +33,10 @@ import javafx.stage.Stage;
 import java.util.Objects;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 public class AcidNeutralizationLab extends Lab {
     private String acid;
@@ -93,13 +98,14 @@ private void initialize() {
         return false; 
     }
         boolean hasNeutralized = false;
+        showFailedScreen();
  
 
     for (Substance substance : droppedSubstances) {
         if (substance.equals(substance3) && substance.equals(substance5)) {
             hasNeutralized = true;
         }
-        
+      detectDroppedSubstances();
     }
 
     return hasNeutralized;
@@ -418,8 +424,10 @@ if (!Substance.existsIn(activeSubstances, substanceImage)) {
         System.out.println("Dropped substances: " + droppedSubstances);
         if (droppedSubstances.contains(substance3) && droppedSubstances.contains(substance5)) {
             System.out.println("Success! You neutralized the floor");
+            showSuccessScreen();
             // Add logic to proceed to the next level
         } else if (droppedSubstances.size() >= 2) {
+            showFailedScreen();
             System.out.println("Incorrect substances! You lose a life.");
             // Add logic to reduce player lives
         }
@@ -470,7 +478,51 @@ if (!Substance.existsIn(activeSubstances, substanceImage)) {
 //
 //    return null;  // No existing substance was found
 //    }
+
+    private void showSuccessScreen() {
+    Stage successStage = new Stage();
+    successStage.setTitle("Lab Complete!");
+
+    Label successLabel = new Label("You successfully neutralized the solution!\n\n "
+            + "Hydrochloric acid (HCl) was neutralized by two different bases: \n"
+            + "NaOH and CaCO₃. NaOH reacted in a typical acid-base reaction"
+            + "to form salt and water,\n while CaCO₃ created a bubbling effect by releasing CO₂ gas.");
+    successLabel.setStyle("-fx-font-size: 16px;");
+successLabel.setWrapText(true); // Allow automatic text wrapping
+successLabel.setMaxWidth(450);
+    Button closeButton = new Button("OK");
+    closeButton.setOnAction(e -> successStage.close());
+
+    VBox layout = new VBox(10, successLabel, closeButton);
+    layout.setAlignment(Pos.CENTER);
+    layout.setPadding(new Insets(20));
+
+    Scene successScene = new Scene(layout, 500, 300);
+    successStage.setScene(successScene);
+    successStage.show();
+    }
     
+    private void showFailedScreen() {
+    Stage failedStage = new Stage();
+    failedStage.setTitle("Lab Failed!");
+
+    Label failedLabel = new Label("You have mixed the wrong substances!\n You just "
+            + "lost a life. \n Hint: This is a special type of neutralization! Since "
+            + "HCl is a strong acid, it requires two different bases to be fully neutralized");
+    failedLabel.setStyle("-fx-font-size: 16px;");
+failedLabel.setWrapText(true); // Allow automatic text wrapping
+failedLabel.setMaxWidth(450);
+    Button closeButton = new Button("OK");
+    closeButton.setOnAction(e -> failedStage.close());
+
+    VBox layout = new VBox(10, failedLabel, closeButton);
+    layout.setAlignment(Pos.CENTER);
+    layout.setPadding(new Insets(20));
+
+    Scene successScene = new Scene(layout, 500, 300);
+    failedStage.setScene(successScene);
+    failedStage.show();
+    }
     
 }
 
