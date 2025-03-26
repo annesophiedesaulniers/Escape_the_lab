@@ -33,6 +33,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Background;
 
 public class AcidNeutralizationLab extends Lab {
 
@@ -146,7 +151,6 @@ createScene();
      */
     private void setupDrag() {
         StackPane[] substances = {AcidHome1, AcidHome2, AcidHome3, AcidHome4, AcidHome5};
-        //StackPane[] substances = {AcidDisplay1, AcidDisplay2, AcidDisplay3, AcidDisplay4, AcidDisplay5};
         for (StackPane substance : substances) {
             ImageView img = new ImageView();
             for (Node child : substance.getChildren()) {
@@ -217,20 +221,20 @@ createScene();
             Substance currentSubstance = createNewSubstance(draggedDisplay);
 
             try {
-                // Move the duck to the arena
-                assert currentSubstance != null; // There should be a duck selected
+                // Move the substance to the arena
+                assert currentSubstance != null; // There should be a substance selected
                 currentSubstance.sprite.setFitWidth(100);
                 currentSubstance.sprite.setFitHeight(100);
                 Objects.requireNonNull(currentSubstance).setActive(true);
 
-                // Set the position of the duck to where it was dropped
+                // Set the position of the substance to where it was dropped
                 currentSubstance.display.setLayoutX(event.getX() - 50);
                 currentSubstance.display.setLayoutY(event.getY() - 50);
 
                 currentSubstance.initialPositionX = currentSubstance.display.getLayoutX();
                 currentSubstance.initialPositionY = currentSubstance.display.getLayoutY();
 
-                // Add the duck to the arena if it's not already there
+                // Add the substance to the arena if it's not already there
                 if (!arenaPane.getChildren().contains(currentSubstance.display)) {
                     arenaPane.getChildren().add(currentSubstance.display);
                     currentSubstance.sprite.setOpacity(1);
@@ -238,10 +242,9 @@ createScene();
 
                 }
 
-                // make the duck draggable within the arena
+                // make the substance draggable within the arena
                 Draggable(currentSubstance);
 
-                //   detectDroppedSubstances();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -267,14 +270,14 @@ createScene();
             db.setContent(content);
         });
 
-        // Set up the acidBank and baseBank to accept subastances dragged back from the arena
+        // Set up the acidBank to accept subastances dragged back from the arena
         AcidBank.setOnDragOver(event -> {
             if (event.getGestureSource() != AcidBank && event.getDragboard().hasImage()) {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
         });
 
-        // handle the drop when the substance is dragged back to the acidBank and baseBank
+        // handle the drop when the substance is dragged back to the acidBank 
         AcidBank.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
 
@@ -363,23 +366,6 @@ createScene();
                     newSubstance.setHome(AcidSprite5);
             }
 
-//switch (newSubstance.substanceNumber()) {
-//    case 1:
-//        newSubstance = substance1;
-//        break;
-//    case 2:
-//        newSubstance = substance2;
-//        break;
-//    case 3:
-//        newSubstance = substance3;
-//        break;
-//    case 4:
-//        newSubstance = substance4;
-//        break;
-//    case 5:
-//        newSubstance = substance5;
-//        break;
-//}
             for (Substance other : activeSubstances) {
                 other.setFocused(false);
             }
@@ -392,9 +378,6 @@ createScene();
                 for (Substance other : activeSubstances) {
                     other.setFocused(false);
                 }
-                // Set the duck's focused properties accordingly
-                //  newSubstance.setFocused(true);
-
             });
 
             activeSubstances.add(newSubstance);
@@ -418,6 +401,7 @@ createScene();
         System.out.println("Dropped substances: " + droppedSubstances);
         if (droppedSubstances.contains(substance3) && droppedSubstances.contains(substance5)) {
             System.out.println("Success! You neutralized the floor");
+            arenaPane.setStyle("");
             showSuccessScreen();
             // Add logic to proceed to the next level
         } else if (droppedSubstances.size() >= 2) {
@@ -517,5 +501,4 @@ createScene();
         failedStage.setScene(successScene);
         failedStage.show();
     }
-
 }

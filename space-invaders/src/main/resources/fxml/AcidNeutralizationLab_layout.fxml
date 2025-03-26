@@ -16,7 +16,9 @@
 <BorderPane maxHeight="-Infinity" maxWidth="0.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <Pane fx:id="arenaPane" layoutX="24.0" layoutY="1.0" prefHeight="600.0" prefWidth="618.0" style="-fx-background-color: #9999;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="1.0">
+         <Pane fx:id="arenaPane" layoutX="24.0" layoutY="1.0" prefHeight="600.0" prefWidth="618.0" style="-fx-background-image: url('/images/yellowSplash.png'); 
+             -fx-background-size: cover; 
+             -fx-background-repeat: no-repeat;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="1.0">
             <children>
                <ImageView fx:id="arenaBackground" fitHeight="600.0" fitWidth="610.0" layoutX="-6.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" />
             </children>
